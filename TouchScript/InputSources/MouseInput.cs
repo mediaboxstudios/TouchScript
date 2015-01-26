@@ -27,7 +27,7 @@ namespace TouchScript.InputSources
         /// <summary>
         /// Tags added to touches coming from this input.
         /// </summary>
-        public Tags Tags = new Tags(Tags.INPUT_MOUSE);
+        public Tags Tags = new Tags();
 
         #endregion
 
@@ -79,9 +79,15 @@ namespace TouchScript.InputSources
         protected override void Update()
         {
             base.Update();
+            
+            CheckForClick(1);
+            CheckForClick(0);
+        }
 
+        void CheckForClick(int button)
+        {
             var upHandled = false;
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(button))
             {
                 if (mousePointId != -1)
                 {
@@ -97,7 +103,7 @@ namespace TouchScript.InputSources
                 fakeMousePointId = -1;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(button))
             {
                 var pos = Input.mousePosition;
                 if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && fakeMousePointId == -1)
@@ -106,10 +112,15 @@ namespace TouchScript.InputSources
                 }
                 else
                 {
-                    if (mousePointId == -1) mousePointId = beginTouch(new Vector2(pos.x, pos.y)).Id;
+                    if (mousePointId == -1)
+                    {
+                        if (button == 0) Tags = new TouchScript.Tags(Tags.INPUT_MOUSE_LEFT);
+                        else if (button == 1) Tags = new TouchScript.Tags(Tags.INPUT_MOUSE_RIGHT);
+                        mousePointId = beginTouch(new Vector2(pos.x, pos.y)).Id;
+                    }
                 }
             }
-            else if (Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(button))
             {
                 var pos = Input.mousePosition;
                 if (mousePointPos != pos)
@@ -126,7 +137,7 @@ namespace TouchScript.InputSources
                 }
             }
 
-            if (Input.GetMouseButtonUp(0) && !upHandled)
+            if (Input.GetMouseButtonUp(button) && !upHandled)
             {
                 endTouch(mousePointId);
                 mousePointId = -1;

@@ -21,9 +21,19 @@ namespace TouchScript
         public const string INPUT_TOUCH = "Touch";
 
         /// <summary>
-        /// Mouse.
+        /// Mouse left button.
         /// </summary>
         public const string INPUT_MOUSE = "Mouse";
+
+        /// <summary>
+        /// Mouse left button.
+        /// </summary>
+        public const string INPUT_MOUSE_LEFT = "MouseLeft";
+
+        /// <summary>
+        /// Mouse right button.
+        /// </summary>
+        public const string INPUT_MOUSE_RIGHT = "MouseRight";
 
         /// <summary>
         /// Pen.
